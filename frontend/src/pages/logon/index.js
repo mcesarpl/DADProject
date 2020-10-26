@@ -8,6 +8,7 @@ import './style.css';
 
 import heroesImg from "../../assets/heroes.png";
 import logoImg from "../../assets/logo.svg";
+import petLogo from "../../assets/PET.png";
 
 export default function Logon () {
 
@@ -16,16 +17,20 @@ export default function Logon () {
     const history = useHistory();
 
     async function handleLogin (event) {
+        history.push('/profile');
+        return
         event.preventDefault();
         try {
             let response = await api.post('users/login', {login, senha});
+            console.log(response);
             if(response.data.erro){
                 alert(response.data.erro)
                 return;
             }
-            const { id,nome,email } = response.data
+            const { id,pessoaid,nome,email } = response.data
             console.log(id,nome,email)
             localStorage.setItem('id', id);
+            localStorage.setItem('pessoaid',pessoaid);
             localStorage.setItem('name', nome);
             localStorage.setItem('email', email)
 
@@ -38,9 +43,9 @@ export default function Logon () {
 
     return(
         <div className="logon-container">
-            <section className="form">
-                <img src={logoImg} alt="Be the Hero"/>
-                <form onSubmit={handleLogin}>
+            <section className="form">                           
+                <form onSubmit={handleLogin}>  
+                <img src={petLogo} alt="Be the Hero" style={{'max-width':'50%'}}/>               
                     <h1>Faça seu login</h1>
 
                     <input 
@@ -63,8 +68,7 @@ export default function Logon () {
                         Não tenho cadastro
                     </Link>
                 </form>
-            </section>
-            <img src={heroesImg} alt="Heroes"/>
+            </section>            
         </div>
     );
 }
